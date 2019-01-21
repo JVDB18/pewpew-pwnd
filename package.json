@@ -1,0 +1,27 @@
+{
+  "name": "pwned-naab",
+  "version": "1.0.0",
+  "description": "Check if your e-mail has been pwned",
+  "main": "index.js",
+  "scripts": {
+    "test": "pew-pew-pwned"
+  },
+  "bin": {
+    "pewpew": "bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "pwned-naab"
+  },
+  "keywords": [
+    "security",
+    "e-mail",
+    "pwned"
+  ],
+  "author": "Julie Vanderbyse",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "email-validator": "^2.0.4"
+  }
+}
