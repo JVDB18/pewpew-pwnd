@@ -2,6 +2,7 @@
 const validator= require('email-validator');
 const axios= require('axios');
 const ora= require('ora');
+const chalk= require('chalk');
 const {NODE_ENV} = process.env;
 
 let[,,text]= process.argv;
@@ -34,11 +35,13 @@ function validity(){
             let uri='https://haveibeenpwned.com/api/v2/breachedaccount/' + text;
             axios.get(uri, config)
             .then(response => {
-                spinner.fail(["Yep you had"]);
-                spinner.stop();
+                spinner.stopAndPersist({
+                    symbol:'💣',
+                    text: chalk.bgRed('BREACH ALERT'),
+                });
                 response.data.forEach(element => {
-                    console.log('Your account has been wrecked by', element.Domain,' ', 'on ', element.BreachDate);
-                    console.log(element.Description);
+                    console.log(chalk.bgRed('Your account has been wrecked by', element.Domain,' ', 'on ', element.BreachDate));
+                    console.log(chalk.red('Description: ',element.Description));
                 })
                 })
             .catch(error => {
@@ -46,24 +49,29 @@ function validity(){
                     if(error.response){
                         spinner.stopAndPersist({
                             symbol:'🦄',
-                            text: "Sending Unicorn's love",
+                            text:chalk.magenta("From Unicorn with love"),
                         });
-                        console.log("Hey, Good Job mate your email adresse hasn't been wrecked");
+                        console.log(chalk.cyan("Hey, Good Job mate your email adresse hasn't been wrecked"));
                     }
                     else if (error === 429){
-                        spinner.fail();
-                        console.log("Server can't handle too much request or your connexion has failed")
+                        spinner.stopAndPersist({
+                            symbol:'🚩',
+                            text:'Oops',
+                        });
+                        console.log(chalk.yellow("Server can't handle too much request or your connexion has failed"))
                     }
                     else{
-                        spinner.fail(["Yep you had"]);
-                        console.log("An unknown error has occured")
+                        spinner.stopAndPersist({
+                            symbol:'🚩',
+                        });
+                        console.log(chalk.yellow("An unknown error has occured"))
                     }
                 })
         };
 
             }
     else{
-        console.log("You didn't write a valid e-mail adress, dumbass, try harder")
+        console.log(chalk.red("You didn't write a valid e-mail adress, dumbass, try harder"))
     }
 }
 validity();
